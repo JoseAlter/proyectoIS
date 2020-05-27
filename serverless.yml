@@ -1,0 +1,49 @@
+service: images-s3
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "s3:*"
+      Resource: "arn:aws:s3:::datakeeper/*"
+    # - Effect: "Allow"
+    #   Action:
+    #     - "textract:*"
+    #   Resource: "*"
+resources:
+  Resources:
+    UploadBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: datakeeper
+        AccessControl: PublicRead
+        CorsConfiguration:
+          CorsRules:
+          - AllowedMethods:
+            - GET
+            - PUT
+            - POST
+            - HEAD
+            AllowedOrigins:
+            - "*"
+            AllowedHeaders:
+            - "*"
+            
+functions:
+  requestUploadURL:
+    handler: handler.requestUploadURL
+    events:
+      - http:
+          path: requestUploadURL
+          method: post
+          cors: true
+
+  textract:
+    handler: handler.llamada
+    events:
+      - http:
+          path: textract
+          method: post
+          cors: true
