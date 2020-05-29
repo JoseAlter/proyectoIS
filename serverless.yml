@@ -85,3 +85,12 @@ functions:
           path: contratos
           method: post
           cors: true
+  
+  contractDetails:
+    handler: src/js/SavetoDB.get
+    description: lamda get.
+    events:
+      - http:
+          path: contratos/{id}
+          method: get
+          cors: true
