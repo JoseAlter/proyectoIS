@@ -153,11 +153,15 @@ module.exports.llamada = async(event, context, callback) => {
         const { keyMap, valueMap, blockMap } = getKeyValueMap(textractResponse.Blocks);
 
         const keyValues = getKeyValueRelationship(keyMap, valueMap, blockMap);
-        let limpieza = await limpiar(keyValues);
+        const limpieza = await limpiar(keyValues);
 
         return {
             statusCode: 200,
+            headers: {
+                'Access-Control-Allow-Origin': '*'
+            },    
             body: JSON.stringify(limpieza)
+            
         }
 
     }
